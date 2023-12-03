@@ -1,7 +1,15 @@
 import { create } from "zustand";
+type userComment = {
+  id: string;
+  body: string;
+};
 
-const useCommentStore = create((set) => ({
-  comments: {}, // state to store comments by postId
+interface commentStore {
+  comments: Record<string, userComment[]>;
+  setComment: (postId: string, comment: userComment) => void;
+}
+const useCommentStore = create<commentStore>()((set) => ({
+  comments: {},
 
   setComment: (postId, comment) =>
     set((state) => ({

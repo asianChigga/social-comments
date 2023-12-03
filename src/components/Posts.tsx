@@ -1,8 +1,7 @@
-import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { FaRegComment } from "react-icons/fa";
 import { motion } from "framer-motion";
-const Posts = ({ postData }) => {
+const Posts = ({ postData }: any) => {
   const navigation = useNavigate();
   const handleClick = () => {
     navigation(`/comments/${postData.id}`);
@@ -12,15 +11,16 @@ const Posts = ({ postData }) => {
   return (
     <div className="flex flex-col items-center">
       <motion.div
-        className="bg-gradient-to-r from-cyan-50 to-blue-100 p-4 gap-3 rounded-lg mt-4 w-1/4 "
+        className="bg-gradient-to-r from-cyan-50 to-blue-100 p-4 gap-3 rounded-lg mt-4 w-1/4 cursor-pointer "
         initial={{ y: 0 }}
         animate={{
           y: [0, -10, 0],
           transition: { type: "spring", stiffness: 300, damping: 10 },
         }}
-        whileHover={{ scale: 1.1 }}
+        whileHover={{ scale: 1.01 }}
+        whileTap={{ scale: 0.99 }}
       >
-        <div className="flex justify-center gap-6 ">
+        <div className="flex gap-6 ">
           <div className="custom-gray border border-solid custom-border rounded-full p-2 h-16 w-16 ">
             <img
               src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${postData.id}.png`}
@@ -33,10 +33,7 @@ const Posts = ({ postData }) => {
           </div>
         </div>
 
-        <div
-          className="flex  m-3 cursor-pointer  justify-end"
-          onClick={handleClick}
-        >
+        <div className="flex  m-3 cursor-pointer  justify-end">
           <motion.div
             className="custom-blue flex items-center gap-2 rounded-full p-2"
             whileHover={{ scale: 1.1 }}
@@ -47,6 +44,7 @@ const Posts = ({ postData }) => {
                 height: "20px",
                 color: "white",
               }}
+              onClick={handleClick}
             />
           </motion.div>
         </div>

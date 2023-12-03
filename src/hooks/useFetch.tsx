@@ -1,11 +1,19 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 
-const useCachedApiData = (apiEndpoint, postId = null) => {
-  const [data, setData] = useState(null);
-  const [error, setError] = useState(null);
+interface CachedApiData {
+  data: postData | commentData;
+  isLoading: boolean;
+  error: Error | unknown;
+}
 
-  const [isLoading, setIsLoading] = useState(true);
+const useCachedApiData = (
+  apiEndpoint: string,
+  postId?: string | null
+): CachedApiData => {
+  const [data, setData] = useState<any>(null);
+  const [error, setError] = useState<Error | null | unknown>(null);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -42,3 +50,18 @@ const useCachedApiData = (apiEndpoint, postId = null) => {
 };
 
 export default useCachedApiData;
+
+type postData = {
+  userId: number;
+  id: number;
+  title: string;
+  body: string;
+}[];
+
+type commentData = {
+  postId: number;
+  id: number;
+  name: string;
+  email: string;
+  body: string;
+}[];

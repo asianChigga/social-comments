@@ -1,19 +1,12 @@
 import React, { useState } from "react";
 import useCachedApiData from "../hooks/useFetch";
 import Posts from "./Posts";
-import { useToast } from "@chakra-ui/react";
+
 import { Spinner } from "@chakra-ui/react";
 import Pagination from "./Pagination";
 
-interface PostData {
-  userId: number;
-  id: number;
-  title: string;
-  body: string;
-}
 const Dashboard: React.FC = () => {
-  const toast = useToast();
-  const { data, isLoading, error } = useCachedApiData<PostData[]>(
+  const { data, isLoading, error } = useCachedApiData(
     "https://jsonplaceholder.typicode.com/posts"
   );
   const [currentPage, setCurrentPage] = useState(1);
@@ -22,9 +15,15 @@ const Dashboard: React.FC = () => {
   const indexOfFirstPost = indexOfLastPost - postsPerPage;
   const currentPosts = data?.slice(indexOfFirstPost, indexOfLastPost);
 
-  // Change page
-  const paginate = (pageNumber) => setCurrentPage(pageNumber);
+  const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
   console.log(error);
+  if (error) {
+    <div className="flex justify-center min-h-screen items-center">
+      <h2 className="bg-red-400 p-3 w-52 text-center font-bold rounded-lg text-white border border-red-600 border-1">
+        Error: {JSON.stringify(error)}
+      </h2>
+    </div>;
+  }
   return (
     <div className="custom-dark-blue">
       {isLoading && (
@@ -32,13 +31,7 @@ const Dashboard: React.FC = () => {
           <Spinner />
         </div>
       )}
-      {error && (
-        <div className="flex justify-center min-h-screen items-center">
-          <h2 className="bg-red-400 p-3 w-52 text-center font-bold rounded-lg text-white border border-red-600 border-1">
-            Error: {error.message}
-          </h2>
-        </div>
-      )}
+
       {currentPosts?.map((postData) => {
         return <Posts postData={postData} />;
       })}
@@ -46,6 +39,7 @@ const Dashboard: React.FC = () => {
         postsPerPage={postsPerPage}
         totalPosts={data?.length}
         paginate={paginate}
+        currentPage={currentPage}
       />
     </div>
   );

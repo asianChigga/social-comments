@@ -1,10 +1,8 @@
 import { useState } from "react";
 import { BiGhost } from "react-icons/bi";
 import { FaUserCircle } from "react-icons/fa";
-import { useNavigate } from "react-router-dom";
 
 const Navbar = () => {
-  const navigation = useNavigate();
   const [isHovered, setIsHovered] = useState(false);
 
   return (

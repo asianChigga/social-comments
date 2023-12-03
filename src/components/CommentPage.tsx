@@ -1,39 +1,49 @@
+import React, { useState, MouseEvent } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import useCachedApiData from "../hooks/useFetch";
-import { useState } from "react";
 import { HiChevronRight } from "react-icons/hi";
 import { GoChevronLeft } from "react-icons/go";
 import useCommentStore from "../hooks/useStore";
 import { Spinner } from "@chakra-ui/react";
 import { motion } from "framer-motion";
-const CommentPage = () => {
+
+const CommentPage: React.FC = () => {
   const [isInputFocused, setIsInputFocused] = useState(false);
-  const { postId } = useParams();
-  const [intValue, setIntValue] = useState("");
+  const { postId } = useParams<{ postId: string }>();
+  const [intputValue, setIntputValue] = useState<string>("");
   const { data, isLoading, error } = useCachedApiData(
     `https://jsonplaceholder.typicode.com/comments?postId=${postId}`
   );
   const navigation = useNavigate();
   const setComment = useCommentStore((state) => state.setComment);
   const comment = useCommentStore((state) => state.comments);
+
   const handleClick = () => {
-    if (intValue.trim() === "") {
+    if (intputValue.trim() === "") {
       return;
     }
 
     const newComment = {
-      postId: postId,
-      body: intValue,
+      id: postId!,
+      body: intputValue,
     };
 
-    setComment(postId, newComment);
-    setIntValue("");
+    setComment(postId!, newComment);
+    setIntputValue("");
     console.log(comment);
   };
-  const handleBack = (e) => {
+
+  const handleBack = (e: MouseEvent<HTMLDivElement>) => {
     e.preventDefault();
     navigation("/");
   };
+  if (error) {
+    <div className="flex justify-center min-h-screen items-center">
+      <h2 className="bg-red-400 p-3  text-center font-bold rounded-lg text-white border border-red-600 border-1">
+        Error: {JSON.stringify(error)}
+      </h2>
+    </div>;
+  }
   return (
     <div className="min-h-screen flex flex-col  custom-dark-blue">
       <div
@@ -53,15 +63,9 @@ const CommentPage = () => {
           <Spinner />
         </div>
       )}
-      {error && (
-        <div className="flex justify-center min-h-screen items-center">
-          <h2 className="bg-red-400 p-3 w-52 text-center font-bold rounded-lg text-white border border-red-600 border-1">
-            Error: {error.message}
-          </h2>
-        </div>
-      )}
+
       <div className="flex flex-col items-center  overflow-y-scroll custom-bar ">
-        {comment[postId]?.map((storeComment) => (
+        {comment[postId!]?.map((storeComment) => (
           <motion.div
             animate={{ x: [100, 0] }}
             transition={{ type: "spring", stiffness: 100 }}
@@ -81,12 +85,12 @@ const CommentPage = () => {
             </div>
           </motion.div>
         ))}
-        {data?.map((comments) => {
+        {data?.map((comments: any) => {
           return (
             <div className="bg-gradient-to-r from-cyan-50 to-blue-100  flex justify-center w-72 mt-3 rounded-lg p-3 gap-3">
               <div>
                 <p className=" custom-gray rounded-full flex justify-center items-center h-7 w-7 p-3 text-xs font-semibold custom-border capitalize">
-                  {comments.name[0]}
+                  {comments.body[0]}
                 </p>
               </div>
               <div>
@@ -105,8 +109,8 @@ const CommentPage = () => {
           placeholder="Add a Comment"
           onFocus={() => setIsInputFocused(true)}
           className="p-2 outline-none flex-1 rounded-full custom-border"
-          value={intValue}
-          onChange={(e) => setIntValue(e.target.value)}
+          value={intputValue}
+          onChange={(e) => setIntputValue(e.target.value)}
         ></input>
         {isInputFocused && (
           <button

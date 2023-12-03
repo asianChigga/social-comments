@@ -11,7 +11,7 @@ const Posts = ({ postData }: any) => {
   return (
     <div className="flex flex-col items-center custom-dark-blue">
       <motion.div
-        className="bg-gradient-to-r from-cyan-50 to-blue-100 p-4 gap-3 rounded-lg m-3 max-w-lg w-auto"
+        className="gap-3 rounded-lg max-w-80 bg-gradient-to-r from-cyan-50 to-blue-100 mt-3 mx-7 max-w-xl p-2 w-auto"
         initial={{ y: 0 }}
         animate={{
           y: [0, -15, 0],
@@ -20,14 +20,14 @@ const Posts = ({ postData }: any) => {
         whileHover={{ scale: 1.01 }}
         whileTap={{ scale: 0.99 }}
       >
-        <div className="flex gap-4 ">
-          <div className="custom-gray border border-solid custom-border rounded-full p-2 h-16 w-16">
+        <div className="flex gap-4 flex-1">
+          <div className="custom-gray border border-solid custom-border rounded-full p-2 w-16 h-16">
             <img
               src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${postData.id}.png`}
-              className="h-12 w-12 rounded-full overflow-hidden"
+              className="rounded-full overflow-hidden"
             />
           </div>
-          <div className="w-72 ">
+          <div className="flex-1">
             <p className="font-bold">@{postData.title.slice(0, 4)}</p>
             <p className="capitalize text-xs mt-1">{postData.body}</p>
           </div>
